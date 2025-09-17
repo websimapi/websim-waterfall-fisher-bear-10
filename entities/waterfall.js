@@ -16,28 +16,21 @@ export function createWaterfall() {
     const riverLength = 30;
 
     // Create a continuous L-shaped riverbed/fall-backing geometry
-    const shape = new THREE.Shape();
-    shape.moveTo(0, riverLength);
-    shape.lineTo(0, 0);
-    shape.lineTo(fallHeight, 0);
+    const riverBedGeo = new THREE.PlaneGeometry(waterWidth, riverLength);
+    const riverBed = new THREE.Mesh(riverBedGeo, riverbedMat);
+    riverBed.rotation.x = -Math.PI / 2;
+    riverBed.position.set(0, 0, cliffEdgeZ - riverLength / 2);
+    group.add(riverBed);
 
-    const extrudeSettings = {
-        steps: 1,
-        depth: waterWidth,
-        bevelEnabled: false,
-    };
+    const fallBackingGeo = new THREE.PlaneGeometry(waterWidth, fallHeight);
+    const fallBacking = new THREE.Mesh(fallBackingGeo, rockFaceMat);
+    fallBacking.position.set(0, cliffTopY - fallHeight / 2, cliffEdgeZ - 0.05); // a little behind the water
+    group.add(fallBacking);
 
-    const fallBeddingGeo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    const fallBedding = new THREE.Mesh(fallBeddingGeo, rockFaceMat);
-    fallBedding.rotation.x = -Math.PI / 2;
-    fallBedding.position.set(-waterWidth / 2, cliffTopY, cliffEdgeZ - riverLength);
-    group.add(fallBedding);
-    
-    // Ground below the fall now acts as a continuous riverbed
-    const groundBelowFallGeo = new THREE.PlaneGeometry(waterWidth, 2); // Shorten the ground plane
+    const groundBelowFallGeo = new THREE.PlaneGeometry(waterWidth, 4); 
     const groundBelowFall = new THREE.Mesh(groundBelowFallGeo, riverbedMat);
     groundBelowFall.rotation.x = -Math.PI / 2;
-    groundBelowFall.position.set(0, 0, cliffEdgeZ + 1); // Reposition it to be right under the waterfall's edge
+    groundBelowFall.position.set(0, 0, cliffEdgeZ + 2); 
     group.add(groundBelowFall);
 
     const riverGeo = new THREE.PlaneGeometry(waterWidth, riverLength);
