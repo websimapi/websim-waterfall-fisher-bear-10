@@ -9,11 +9,11 @@ const rockFaceMat = new THREE.MeshLambertMaterial({ color: 0x808080 }); // Rock 
 export function createWaterfall() {
     const group = new THREE.Group();
     group.name = "waterfall";
-    const waterWidth = 7; 
+    const waterWidth = 6.8; // Slightly narrower to prevent clipping with mountains
     const cliffEdgeZ = 2.5;
     const cliffTopY = 2;
     const fallHeight = 20;
-    const riverLength = 30;
+    const riverLength = 18; // Reduced from 30 to prevent extending too far
 
     // Create a continuous L-shaped riverbed/fall-backing geometry
     const riverBedGeo = new THREE.PlaneGeometry(waterWidth, riverLength);
@@ -29,7 +29,7 @@ export function createWaterfall() {
 
     // This is the riverbed under the log where the player is.
     // It should start at the waterfall cliff edge and extend to just past the log.
-    const groundBelowFallLength = 3;
+    const groundBelowFallLength = 2.2; // Reduced to just cover area under log
     const groundBelowFallGeo = new THREE.PlaneGeometry(waterWidth, groundBelowFallLength); 
     const groundBelowFall = new THREE.Mesh(groundBelowFallGeo, riverbedMat);
     groundBelowFall.rotation.x = -Math.PI / 2;
