@@ -15,25 +15,26 @@ export function createWaterfall() {
     const fallHeight = 20;
     const riverLength = 18; // Reduced from 30 to prevent extending too far
 
-    // Create a continuous L-shaped riverbed/fall-backing geometry
-    const riverBedGeo = new THREE.PlaneGeometry(waterWidth, riverLength);
+    // Riverbed upstream - matches river exactly
+    const riverBedGeo = new THREE.PlaneGeometry(waterWidth * 0.95, riverLength * 0.95); // Slightly smaller to prevent clipping
     const riverBed = new THREE.Mesh(riverBedGeo, riverbedMat);
     riverBed.rotation.x = -Math.PI / 2;
-    riverBed.position.set(0, 0, cliffEdgeZ - riverLength / 2);
+    riverBed.position.set(0, -0.05, cliffEdgeZ - riverLength / 2);
     group.add(riverBed);
 
-    const fallBackingGeo = new THREE.PlaneGeometry(waterWidth, fallHeight);
+    // Fall backing - precisely behind waterfall, same dimensions
+    const fallBackingGeo = new THREE.PlaneGeometry(waterWidth * 0.95, fallHeight * 0.95);
     const fallBacking = new THREE.Mesh(fallBackingGeo, rockFaceMat);
-    fallBacking.position.set(0, cliffTopY - fallHeight / 2, cliffEdgeZ - 0.05); // a little behind the water
+    fallBacking.position.set(0, cliffTopY - fallHeight / 2, cliffEdgeZ - 0.1);
     group.add(fallBacking);
 
     // This is the riverbed under the log where the player is.
     // It should start at the waterfall cliff edge and extend to just past the log.
-    const groundBelowFallLength = 2.2; // Reduced to just cover area under log
-    const groundBelowFallGeo = new THREE.PlaneGeometry(waterWidth, groundBelowFallLength); 
+    const groundBelowFallLength = 1.8; // Just covers area under log
+    const groundBelowFallGeo = new THREE.PlaneGeometry(waterWidth * 0.95, groundBelowFallLength); 
     const groundBelowFall = new THREE.Mesh(groundBelowFallGeo, riverbedMat);
     groundBelowFall.rotation.x = -Math.PI / 2;
-    groundBelowFall.position.set(0, 0, cliffEdgeZ + groundBelowFallLength / 2); 
+    groundBelowFall.position.set(0, -0.05, cliffEdgeZ + groundBelowFallLength / 2); 
     group.add(groundBelowFall);
 
     const riverGeo = new THREE.PlaneGeometry(waterWidth, riverLength);
