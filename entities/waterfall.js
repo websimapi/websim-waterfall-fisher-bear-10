@@ -3,8 +3,7 @@ import * as THREE from 'three';
 const waterMat = new THREE.MeshLambertMaterial({ color: 0x1e90ff, transparent: true, opacity: 0.8 });
 const foamMat = new THREE.MeshLambertMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 });
 const particleMat = new THREE.MeshBasicMaterial({ color: 0x967969, transparent: true, opacity: 0.6 });
-const riverbedMat = new THREE.MeshLambertMaterial({ color: 0xc2b280 });
-const rockFaceMat = new THREE.MeshLambertMaterial({ color: 0x808080 }); // Rock color for cliff
+const groundMat = new THREE.MeshLambertMaterial({ color: 0x8b7355 }); // Brown ground material
 
 export function createWaterfall() {
     const group = new THREE.Group();
@@ -15,37 +14,38 @@ export function createWaterfall() {
     const fallHeight = 20;
     const riverLength = 18; // Reduced from 30 to prevent extending too far
 
-    // Riverbed upstream - matches river exactly
-    const riverBedGeo = new THREE.PlaneGeometry(waterWidth * 0.95, riverLength * 0.95); // Slightly smaller to prevent clipping
-    const riverBed = new THREE.Mesh(riverBedGeo, riverbedMat);
-    riverBed.rotation.x = -Math.PI / 2;
-    riverBed.position.set(0, -0.05, cliffEdgeZ - riverLength / 2);
-    group.add(riverBed);
+    // Static ground under river - positioned lower and back
+    const groundRiverGeo = new THREE.PlaneGeometry(waterWidth, riverLength);
+    const groundRiver = new THREE.Mesh(groundRiverGeo, groundMat);
+    groundRiver.rotation.x = -Math.PI / 2;
+    groundRiver.position.set(0, cliffTopY - 0.5, cliffEdgeZ - riverLength / 2 - 1);
+    group.add(groundRiver);
 
-    // Fall backing - precisely behind waterfall, same dimensions
-    const fallBackingGeo = new THREE.PlaneGeometry(waterWidth * 0.95, fallHeight * 0.95);
-    const fallBacking = new THREE.Mesh(fallBackingGeo, rockFaceMat);
-    fallBacking.position.set(0, cliffTopY - fallHeight / 2, cliffEdgeZ - 0.1);
-    group.add(fallBacking);
+    // Static ground behind waterfall - positioned back and matching fall dimensions
+    const groundFallGeo = new THREE.PlaneGeometry(waterWidth, fallHeight);
+    const groundFall = new THREE.Mesh(groundFallGeo, groundMat);
+    groundFall.position.set(0, cliffTopY - fallHeight / 2, cliffEdgeZ - 1.5);
+    group.add(groundFall);
 
-    // This is the riverbed under the log where the player is.
-    // It should start at the waterfall cliff edge and extend to just past the log.
-    const groundBelowFallLength = 1.8; // Just covers area under log
-    const groundBelowFallGeo = new THREE.PlaneGeometry(waterWidth * 0.95, groundBelowFallLength); 
-    const groundBelowFall = new THREE.Mesh(groundBelowFallGeo, riverbedMat);
-    groundBelowFall.rotation.x = -Math.PI / 2;
-    groundBelowFall.position.set(0, -0.05, cliffEdgeZ + groundBelowFallLength / 2); 
-    group.add(groundBelowFall);
+    // Static ground below log area - positioned lower and back
+    const groundBelowLength = 4;
+    const groundBelowGeo = new THREE.PlaneGeometry(waterWidth, groundBelowLength);
+    const groundBelow = new THREE.Mesh(groundBelowGeo, groundMat);
+    groundBelow.rotation.x = -Math.PI / 2;
+    groundBelow.position.set(0, cliffTopY - 0.5, cliffEdgeZ + groundBelowLength / 2 - 1);
+    group.add(groundBelow);
 
     const riverGeo = new THREE.PlaneGeometry(waterWidth, riverLength);
     const river = new THREE.Mesh(riverGeo, waterMat);
     river.rotation.x = -Math.PI / 2;
     river.position.set(0, cliffTopY, cliffEdgeZ - riverLength / 2);
     group.add(river);
+    
     const fallGeo = new THREE.PlaneGeometry(waterWidth, fallHeight);
     const fall = new THREE.Mesh(fallGeo, waterMat);
     fall.position.set(0, cliffTopY - fallHeight / 2, cliffEdgeZ);
     group.add(fall);
+    
     for (let i = 0; i < 50; i++) {
         const foam = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), foamMat);
         const onRiver = Math.random() > 0.4;
