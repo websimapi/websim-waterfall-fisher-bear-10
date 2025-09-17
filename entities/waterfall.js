@@ -27,10 +27,13 @@ export function createWaterfall() {
     fallBacking.position.set(0, cliffTopY - fallHeight / 2, cliffEdgeZ - 0.05); // a little behind the water
     group.add(fallBacking);
 
-    const groundBelowFallGeo = new THREE.PlaneGeometry(waterWidth, 4); 
+    // This is the riverbed under the log where the player is.
+    // It should start at the waterfall cliff edge and extend to just past the log.
+    const groundBelowFallLength = 3;
+    const groundBelowFallGeo = new THREE.PlaneGeometry(waterWidth, groundBelowFallLength); 
     const groundBelowFall = new THREE.Mesh(groundBelowFallGeo, riverbedMat);
     groundBelowFall.rotation.x = -Math.PI / 2;
-    groundBelowFall.position.set(0, 0, cliffEdgeZ + 2); 
+    groundBelowFall.position.set(0, 0, cliffEdgeZ + groundBelowFallLength / 2); 
     group.add(groundBelowFall);
 
     const riverGeo = new THREE.PlaneGeometry(waterWidth, riverLength);
