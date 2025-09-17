@@ -88,7 +88,7 @@ export function updateWaterfall(waterfallGroup) {
     const cliffEdgeZ = 2.5;
     const cliffTopY = 2;
     const fallHeight = 20;
-    const riverLength = 30;
+    const riverLength = 18; // Corrected to match createWaterfall
     waterfallGroup.children.forEach(child => {
         if (child.userData.velocity) {
             child.position.add(child.userData.velocity);

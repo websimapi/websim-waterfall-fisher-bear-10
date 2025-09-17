@@ -198,14 +198,12 @@ function animate() {
                 gameOver();
             }
         }
-    } else if (gameState.current === 'GAME_OVER') {
-        if (bear.position.y > -10) {
-            bear.position.add(gravity);
-            bear.rotation.z += 0.05;
-        }
     } else { // IDLE (title screen)
         bear.rotation.y += 0.01;
-        if (showcaseFish) showcaseFish.rotation.y += 0.02;
+        if (showcaseFish) {
+            showcaseFish.rotation.y += 0.02;
+            updateFish(showcaseFish); // Add this to make the fish swim
+        }
     }
     renderer.render(scene, camera);
 }

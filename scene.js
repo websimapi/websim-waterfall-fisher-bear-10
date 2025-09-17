@@ -11,20 +11,20 @@ camera.lookAt(0, 2, 0);
 let renderer;
 try {
     renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-} catch (webglError) {
-    console.error('WebGL not supported:', webglError);
-    // Show error message to user
+} catch (e) {
+    console.error("Error creating WebGL Renderer:", e);
+    // Fallback or error message display
     document.body.innerHTML = `
         <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #333; color: white; font-family: Arial, sans-serif; text-align: center; padding: 20px;">
             <div>
                 <h1>Browser Not Supported</h1>
-                <p>This game requires WebGL support.<br>Please try updating your browser or enabling hardware acceleration.</p>
+                <p>This game requires WebGL, which is not available or enabled in your browser.<br>Please try updating your browser or using a different one like Chrome or Firefox.</p>
             </div>
         </div>
     `;
-    throw new Error('WebGL not supported');
+    throw new Error('No supported renderer available');
 }
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 export { renderer };
 
