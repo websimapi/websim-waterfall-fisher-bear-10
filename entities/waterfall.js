@@ -34,10 +34,10 @@ export function createWaterfall() {
     group.add(fallBedding);
     
     // Ground below the fall now acts as a continuous riverbed
-    const groundBelowFallGeo = new THREE.PlaneGeometry(waterWidth, 20);
+    const groundBelowFallGeo = new THREE.PlaneGeometry(waterWidth, 2); // Shorten the ground plane
     const groundBelowFall = new THREE.Mesh(groundBelowFallGeo, riverbedMat);
     groundBelowFall.rotation.x = -Math.PI / 2;
-    groundBelowFall.position.set(0, 0, cliffEdgeZ + 10); // Set Y to 0 for seamless riverbed
+    groundBelowFall.position.set(0, 0, cliffEdgeZ + 1); // Reposition it to be right under the waterfall's edge
     group.add(groundBelowFall);
 
     const riverGeo = new THREE.PlaneGeometry(waterWidth, riverLength);
