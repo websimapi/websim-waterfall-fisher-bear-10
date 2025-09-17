@@ -7,28 +7,23 @@ export const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window
 camera.position.set(0, 12, 9);
 camera.lookAt(0, 2, 0);
 
-// Try WebGL first, fallback to Canvas renderer if WebGL fails
+// Create WebGL renderer with fallback error handling
 let renderer;
 try {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 } catch (webglError) {
-    console.warn('WebGL not supported, falling back to Canvas renderer:', webglError);
-    try {
-        renderer = new THREE.CanvasRenderer();
-    } catch (canvasError) {
-        console.error('Neither WebGL nor Canvas renderer supported:', canvasError);
-        // Show error message to user
-        document.body.innerHTML = `
-            <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #333; color: white; font-family: Arial, sans-serif; text-align: center; padding: 20px;">
-                <div>
-                    <h1>Browser Not Supported</h1>
-                    <p>This game requires WebGL or Canvas support.<br>Please try updating your browser or enabling hardware acceleration.</p>
-                </div>
+    console.error('WebGL not supported:', webglError);
+    // Show error message to user
+    document.body.innerHTML = `
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #333; color: white; font-family: Arial, sans-serif; text-align: center; padding: 20px;">
+            <div>
+                <h1>Browser Not Supported</h1>
+                <p>This game requires WebGL support.<br>Please try updating your browser or enabling hardware acceleration.</p>
             </div>
-        `;
-        throw new Error('No supported renderer available');
-    }
+        </div>
+    `;
+    throw new Error('WebGL not supported');
 }
 
 export { renderer };
